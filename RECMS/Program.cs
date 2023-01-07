@@ -1,10 +1,23 @@
+global using RECMS.Models;
+global using RECMS.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 
+//for Entity Framework 
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    provideroptions => provideroptions.EnableRetryOnFailure()
+    ));
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

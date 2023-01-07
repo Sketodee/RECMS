@@ -1,7 +1,35 @@
-﻿import React from "react"
+﻿import React, { useState, useEffect } from 'react'
 
-export function Something() {
+const Something = () => {
+
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        fetch("testing")
+            .then((results) => {
+                return results.json();
+            })
+            .then(data => {
+                setItems(data)
+            })
+    }, [])
+
+    console.log(items)
+    console.log("why")
+
+    const Display = (item) => {
+        return (
+            <p> {item.name} </p>
+            )
+    }
+
     return (
-        <p> something works here </p>
+        <div>
+            <p> something works here </p>
+            {items.length > 0 ? items.map(item => <p> {item.name}</p>) : <p> Loading ... </p>}
+        </div>
+        
     );
 }
+
+export default Something;

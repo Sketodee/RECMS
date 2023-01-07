@@ -1,7 +1,7 @@
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
-import { Something } from "./components/Something"
+import Something from "./components/Something"
 
 const AppRoutes = [
   {
