@@ -20,12 +20,7 @@ namespace RECMS.Controllers
         };
 
         
-        [HttpGet]
-        //public Testing[] Get()
-        //{
-        //    Testing[] data = Tests.ToArray();
-        //    return data;
-        //}
+        [HttpGet("gettest")]
         public async Task<IEnumerable<Testing>> Test()
         {
 

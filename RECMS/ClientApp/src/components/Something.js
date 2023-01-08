@@ -5,7 +5,7 @@ const Something = () => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch("testing")
+        fetch("Testing/gettest")
             .then((results) => {
                 return results.json();
             })

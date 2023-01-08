@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace RECMS.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext <AppUser>
     {
         public DbSet<Testing> Testings { get; set; } = null!;
         public DataContext(DbContextOptions<DataContext> options): base(options)
@@ -18,14 +18,14 @@ namespace RECMS.Data
             new Testing()
             {
                 Id = 1, 
-                Name = "fantasma", 
+                Name = "Fantasma", 
                 Hobby = "Soccer"
             },
              new Testing()
              {
                  Id = 2,
-                 Name = "diablo",
-                 Hobby = "Witch-hunt"
+                 Name = "Diablo",
+                 Hobby = "Witch-hunting"
              },
               new Testing()
               {

@@ -1,0 +1,11 @@
+﻿1. Solved issues with swagger 
+	to see the swagger backend aspect of this project, 
+
+	a. install swashbuckle fron nuget package manager 
+	b. add app.swagger and app.swaggerUI to the program.cs file 
+	c. go to setupproxy.js file in the client app folder and add "/swagger"
+	d. launch the app, 
+	e. if you make a call to the weatherforecast endpoint, it returns an html body as the response. to fix this , check next steps 
+	f. go back to setupproxy.js file and rename "weatherforecast" to "WeatherForecast". 
+	g. go to fetchdata.js and change the weatherforecast in fetch api to WeatherForecast
+	h. note that all controllers that will be added to the setupproxy.js file should be named according to their controller(it is case sensitive)
