@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react'
+import Login from './Login';
 
 const Something = () => {
 
@@ -26,7 +27,9 @@ const Something = () => {
     return (
         <div>
             <p> something works here </p>
-            {items.length > 0 ? items.map(item => <p> {item.name}</p>) : <p> Loading ... </p>}
+            <button className="btn btn-success"> i am me </button>
+            {items.length > 0 ? items.map(item => <p key={ item.id}> {item.name}</p>) : <p> Loading ... </p>}
+            <Login />
         </div>
         
     );

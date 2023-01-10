@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RECMS.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("[Controller]")]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
@@ -25,7 +25,7 @@ namespace RECMS.Controllers
                 {
                     UserName = user.Email,
                     Email = user.Email,
-                    FullName = user.FullName,
+                    //FullName = user.FullName,
                     AccountDetails = user.AccountDetails,
                 };
 
@@ -48,6 +48,12 @@ namespace RECMS.Controllers
             }
 
             return response;
+        }
+
+        [HttpGet("testendpoint")]
+        public IActionResult Get()
+        {
+            return Ok("hey");
         }
     }
 }
