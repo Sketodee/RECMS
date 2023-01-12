@@ -1,18 +1,23 @@
 ﻿import React, { useState, useEffect } from 'react'
 import Login from './Login';
+import axios from 'axios'
 
 const Something = () => {
 
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch("Testing/gettest")
-            .then((results) => {
-                return results.json();
-            })
-            .then(data => {
-                setItems(data)
-            })
+        axios.get("Testing/gettest").then((response) => {
+            var data = response.data;
+            setItems(data);
+        });
+        //fetch("Testing/gettest")
+        //    .then((results) => {
+        //        return results.json();
+        //    })
+        //    .then(data => {
+        //        setItems(data)
+        //    })
     }, [])
 
     console.log(items)

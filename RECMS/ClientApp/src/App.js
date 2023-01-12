@@ -8,6 +8,7 @@ import Something from "./components/Something"
 import Login from "./components/Login"
 import './custom.css';
 import { FetchData } from './components/FetchData';
+import Signup from './components/Signup';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -18,7 +19,7 @@ export default class App extends Component {
               <NavMenu />
               <Container>
                   <Routes>
-                      <Route path="/" element={<Login />} />
+                      <Route path="/" element={<Signup />} />
                       <Route path="/something" element={<Something />} />
                       <Route path="/fetch-data" element={<FetchData />} />
                       <Route path="/counter" element={<Counter />} />

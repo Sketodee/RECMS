@@ -39,6 +39,7 @@ builder.Services.AddSwaggerGen(options =>
 
 //registered services 
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddHttpContextAccessor();
 
 //for Entity Framework 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(

@@ -1,28 +1,36 @@
 ﻿import React, { useState } from "react";
+import axios from 'axios'
 
 const Login = () => {
 
     const [inputValue, setInputValue] = useState({})
     const [errorCheck, setErrorCheck] = useState({})
-    const [successful, setSuccessful] = useState(false)
     const [loggedIn, setLoggedIn] = useState(false)
+    const [success, setSuccess] = useState(false)
+
+    //useEffect(() => {
+    //    axios.get("Testing/gettest").then((response) => {
+    //        var data = response.data;
+    //        setItems(data);
+    //    });
+    //}, [])
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setInputValue({ ...inputValue, [name]: value })
-        console.log(inputValue);
+        if (success) {
+            console.log(inputValue)
+        }
     }
 
     const handleSubmit = (e) => {
-        console.log("submitting")
         e.preventDefault()
         setErrorCheck(validateInput(inputValue))
-        setLoggedIn(true)
     }
 
     const validateInput = (values) => {
         let error = {}
-        if (!values.username) {
+        if (!values.accountDetails) {
             error.username = "Username is required"
         }
         if (!values.email) {
@@ -34,16 +42,18 @@ const Login = () => {
             error.password = "password is required"
         } else if (values.password.length < 6 || values.password.length > 20) {
             error.password = "password should be between 6 and 20 characters"
-        } else {
-            setSuccessful(true)
+        } else if (values.password != values.confirmPassword) {
+            error.confirmPassword = "passwords doesn't match"
         }
-        return error
+        else {
+            setSuccess(true); 
+        }
+        return error 
     }
-
 
     return (
         <>
-            {loggedIn ? 
+            {success ? 
                 <p> You are logged In </p>
 
                 : 
@@ -51,33 +61,41 @@ const Login = () => {
                 <div className="row">
                     <div className="col-12 col-lg-6">
                         <h2> Login </h2>
-                        {successful && <p style={{ backgroundColor: "green", color: "white", textAlign: "center", padding: "10px, 0px" }}> Submitted ! </p>}
                         <form onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <label htmlFor="username" className="form-label">Username: </label>
-                                <input
-                                    type="text" placeholder='enter username' className="form-control" id='username' value={inputValue.username} name="username"
-                                    onChange={handleChange} required
-                                />
-                                <p style={{ color: "red" }}> {errorCheck.username} </p>
-                            </div>
 
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label">Email</label>
                                 <input
                                     type="text" placeholder='enter email' className="form-control" id='email' value={inputValue.email} name="email"
-                                    onChange={handleChange} required
+                                    onChange={handleChange}
                                 />
                                 <p style={{ color: "red" }}> {errorCheck.email} </p>
                             </div>
 
                             <div className="mb-3">
+                                <label htmlFor="accountDetails" className="form-label">Account Details: </label>
+                                <input
+                                    type="text" placeholder='enter account details' className="form-control" id='accountDetails' value={inputValue.accountDetails} name="accountDetails"
+                                    onChange={handleChange}
+                                />
+                                <p style={{ color: "red" }}> {errorCheck.accountDetails} </p>
+                            </div> 
+
+                            <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
                                 <input
                                     type="password" placeholder='password' className="form-control" id='password' value={inputValue.password} name="password"
-                                    onChange={handleChange} required
+                                    onChange={handleChange}
                                 />
                                 <p style={{ color: "red" }}> {errorCheck.password} </p>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="confirmPassword" className="form-label">Password</label>
+                                <input
+                                    type="password" placeholder='confirm password' className="form-control" id='confirmPassword' value={inputValue.confirmPassword} name="confirmPassword"
+                                    onChange={handleChange} 
+                                />
+                                <p style={{ color: "red" }}> {errorCheck.confirmPassword} </p>
                             </div>
 
                             <button type="submit" className="btn btn-primary">Submit</button>

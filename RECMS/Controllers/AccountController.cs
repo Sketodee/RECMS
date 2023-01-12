@@ -12,11 +12,13 @@ namespace RECMS.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IAccountService _accountService;
+        private readonly IHttpContextAccessor _accessor;
 
-        public AccountController(UserManager<AppUser> userManager, IAccountService accountService)
+        public AccountController(UserManager<AppUser> userManager, IAccountService accountService, IHttpContextAccessor accessor)
         {
             _userManager = userManager;
             _accountService = accountService;
+            _accessor = accessor;
         }
 
         [HttpPost("signup"), AllowAnonymous]
@@ -34,10 +36,11 @@ namespace RECMS.Controllers
             return Ok(response);
         }
 
-        [HttpGet("testendpoint"), Authorize(Roles = "User")]
+        [HttpGet("testendpoint"), Authorize(Roles = "Admin")]
         public IActionResult Get()
         {
-            return Ok("hey");
+            var value = HttpContext.Response.StatusCode;
+            return Ok(value);
         }
 
         [HttpPost("login"), AllowAnonymous]
