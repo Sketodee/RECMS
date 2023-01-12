@@ -1,59 +1,53 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RECMS.Services;
 
 namespace RECMS.Controllers
 {
     [ApiController]
-    [Route("[Controller]")]
+    [Route("[Controller]"), Authorize]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IAccountService _accountService;
+        private readonly IHttpContextAccessor _accessor;
 
-        public AccountController(UserManager<AppUser> userManager)
+        public AccountController(UserManager<AppUser> userManager, IAccountService accountService, IHttpContextAccessor accessor)
         {
             _userManager = userManager;
+            _accountService = accountService;
+            _accessor = accessor;
         }
 
-        [HttpPost("signup")]
-        public async Task<ServiceResponse<User>> Signup(User user)
+        [HttpPost("signup"), AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<User>>> Signup(User user)
         {
-            ServiceResponse<User> response = new();
-            try
-            {
-                AppUser appUser = new AppUser
-                {
-                    UserName = user.Email,
-                    Email = user.Email,
-                    //FullName = user.FullName,
-                    AccountDetails = user.AccountDetails,
-                };
-
-                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
-
-                if (!result.Succeeded)
-                {
-                    response.Message = "can't create user " + result.Errors.FirstOrDefault()?.Description;
-                    response.Success = false;
-                    return response;
-                }
-
-                response.Success = true;
-                response.Message = "user created successfully";
-            }
-            catch(Exception ex)
-            {
-                response.Message = ex.Message;  
-                response.Success = false;
-            }
-
-            return response;
+            var response = await _accountService.Signup(user);
+            return Ok(response);
+        }
+        
+        
+        [HttpPost("createadmin"), AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<User>>> CreateAdmin(User user)
+        {
+            var response = await _accountService.CreateAdmin(user);
+            return Ok(response);
         }
 
-        [HttpGet("testendpoint")]
+        [HttpGet("testendpoint"), Authorize(Roles = "Admin")]
         public IActionResult Get()
         {
-            return Ok("hey");
+            var value = HttpContext.Response.StatusCode;
+            return Ok(value);
+        }
+
+        [HttpPost("login"), AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<LoginCred>>> Login(LoginUser login)
+        {
+            var response = await _accountService.Login(login); 
+            return Ok(response);
         }
     }
 }
