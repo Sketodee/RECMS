@@ -25,6 +25,14 @@ namespace RECMS.Controllers
             var response = await _accountService.Signup(user);
             return Ok(response);
         }
+        
+        
+        [HttpPost("createadmin"), AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<User>>> CreateAdmin(User user)
+        {
+            var response = await _accountService.CreateAdmin(user);
+            return Ok(response);
+        }
 
         [HttpGet("testendpoint"), Authorize(Roles = "User")]
         public IActionResult Get()

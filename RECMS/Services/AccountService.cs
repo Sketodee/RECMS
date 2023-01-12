@@ -69,6 +69,50 @@ namespace RECMS.Services
         }
 
 
+        public async Task<ServiceResponse<User>> CreateAdmin(User user)
+        {
+            ServiceResponse<User> response = new();
+            try
+            {
+                AppUser appUser = new AppUser
+                {
+                    UserName = user.Email,
+                    Email = user.Email,
+                    //FullName = user.FullName,
+                    AccountDetails = user.AccountDetails,
+                };
+
+                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+
+                //check if user role already exists
+                if (!await _roleManager.RoleExistsAsync("Admin"))
+                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+                if (await _roleManager.RoleExistsAsync("Admin"))
+                {
+                    await _userManager.AddToRoleAsync(appUser, "Admin");
+                }
+
+                if (!result.Succeeded)
+                {
+                    response.Message = "can't create admin " + result.Errors.FirstOrDefault()?.Description;
+                    response.Success = false;
+                    return response;
+                }
+
+                response.Success = true;
+                response.Message = "admin created successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+            }
+
+            return response;
+        }
+
+
         public async Task<ServiceResponse<LoginCred>> Login(LoginUser login)
         {
             ServiceResponse<LoginCred> response = new(); 
@@ -133,6 +177,5 @@ namespace RECMS.Services
 
             return token;
         }
-
     }
 }
