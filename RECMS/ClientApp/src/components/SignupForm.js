@@ -1,10 +1,13 @@
-﻿import react from "react"
+﻿import react, { useState, useContext } from "react"
 import axios from 'axios'
 import { Formik } from 'formik'
 import * as Yup from 'yup';
-
+import AuthContext from "../context/AuthProvider"
 
 const SignupForm = () => {
+
+    const { setAuth } = useContext(AuthContext);
+
     return(
 
         <Formik
@@ -21,12 +24,12 @@ const SignupForm = () => {
                     .required('Required'),
                 email: Yup.string().email('Invalid email address').required('Required'),
                 password: Yup.string()
-                    .required("please enter your password")
+                    .required("Please enter your password")
                     .min(8, "Must be 8 characters or more")
-                    .matches(/[a-z]+/, "must contain one lowercase character")
-                    .matches(/[A-Z]+/, "must contain one uppercase character")
-                    .matches(/[@$!%*#?&]+/, "must contain at least one special character(@$!%*#?&)")
-                    .matches(/\d+/, "must contain at least one number"),
+                    .matches(/[a-z]+/, "Password must contain one lowercase character")
+                    .matches(/[A-Z]+/, "Password must contain one uppercase character")
+                    .matches(/[@$!%*#?&]+/, "Password must contain at least one special character(@$!%*#?&)")
+                    .matches(/\d+/, "Password must contain at least one number"),
                 confirmPassword: Yup.string()
                     .required("Please confirm your password")
                     .oneOf([Yup.ref('password'), null], "Passwords don't match.")
@@ -41,46 +44,55 @@ const SignupForm = () => {
                     body: JSON.stringify(values)
                 };
                 fetch('Account/signup', requestOptions)
-                    .then(response => response.json())
-                    .then(response => console.log(response));
-                    //.then(data => console.log(data));
-                resetForm({values: ''})
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => console.log(data))
+                    .catch((error) => {
+                        console.log(error.message);
+                        //if (error.message === 401) {
+                        //    console.log("Not Authorized")
+                        //} else if (error.message == 404) {
+                        //    console.log("Not Found")
+                        //}
+                    });
+                resetForm({ values: '' })
+                setAuth(values)
             }}
         >
 
             {formik => (
                 <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="email" className="mb-2, mt-3">Email Address</label>
+                    <label htmlFor="email" className="mb-2, mt-3">Email Address {formik.touched.email && formik.errors.email ? <span className="text-danger fs-6">({formik.errors.email})</span> : null }  </label>
                     <input className="form-control"
                         id="email"
                         type="email"
                         {...formik.getFieldProps('email')}
                     />
-                    {formik.touched.email && formik.errors.email ? <div className="text-danger">{formik.errors.email}</div> : null}
 
-                    <label htmlFor="accountDetails" className="mt-3">Account details </label>
+                    <label htmlFor="accountDetails" className="mt-3">Account details {formik.touched.accountDetails && formik.errors.accountDetails ? <span className="text-danger">({formik.errors.accountDetails})</span> : null } </label>
                     <input className="form-control"
                         id="accountDetails"
                         type="text"
                         {...formik.getFieldProps('accountDetails')}
                     />
-                    {formik.touched.accountDetails && formik.errors.accountDetails ? <div className="text-danger">{formik.errors.accountDetails}</div> : null}
 
-                    <label htmlFor="password" className="mt-3"> Password </label>
+                    <label htmlFor="password" className="mt-3"> Password {formik.touched.password && formik.errors.password ? <span className="text-danger">({formik.errors.password})</span> : null } </label>
                     <input className="form-control"
                         id="password"
                         type="password"
                         {...formik.getFieldProps('password')}
                     />
-                    {formik.touched.password && formik.errors.password ? <div className="text-danger">{formik.errors.password}</div> : null}
 
-                    <label htmlFor="confirmPassword" className="mt-3"> Password </label>
+                    <label htmlFor="confirmPassword" className="mt-3"> Confirm Password {formik.touched.confirmPassword && formik.errors.confirmPassword ? <span className="text-danger">({formik.errors.confirmPassword})</span> : null }</label>
                     <input className="form-control"
                         id="confirmPassword"
                         type="password"
                         {...formik.getFieldProps('confirmPassword')}
                     />
-                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? <div className="text-danger">{formik.errors.confirmPassword}</div> : null}
 
                     <button className="btn btn-primary mt-3" type="submit">Submit</button>
                 </form>

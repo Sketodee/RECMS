@@ -1,10 +1,13 @@
-﻿import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect, useContext} from 'react'
 import Login from './Login';
-import axios from 'axios'
+import axios from 'axios';
+import AuthContext from "../context/AuthProvider";
+
 
 const Something = () => {
 
     const [items, setItems] = useState([]);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         axios.get("Testing/gettest").then((response) => {
@@ -20,8 +23,8 @@ const Something = () => {
         //    })
     }, [])
 
-    console.log(items)
     console.log("why")
+    console.log(auth);
 
     const Display = (item) => {
         return (
