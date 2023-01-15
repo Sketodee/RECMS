@@ -9,27 +9,34 @@ import Login from "./components/Login"
 import './custom.css';
 import { FetchData } from './components/FetchData';
 import Signup from './components/Signup';
+import Layout from './components/Layout';
+import RequireAuth from "./context/RequireAuth"
 
-export default class App extends Component {
-  static displayName = App.name;
+const App = () => {
+    return (
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                {/*public routes*/}
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
 
-  render() {
-      return (
-          <>
-              <NavMenu />
-              <Container>
-                  <Routes>
-                      <Route path="/" element={<Signup />} />
-                      <Route path="/something" element={<Something />} />
-                      <Route path="/fetch-data" element={<FetchData />} />
-                      <Route path="/counter" element={<Counter />} />
-                  </Routes>
-              </Container> 
-          </>
+                {/*protected routes */}
+                <Route element={<RequireAuth />}> 
+                    <Route path="/" element={<Home />} />
+                    <Route path="/something" element={<Something />} />
+    //              <Route path="/fetch-data" element={<FetchData />} />
+    //              <Route path="/counter" element={<Counter />} />
+                </Route>
+            </Route>
+        </Routes>
     );
-  }
 }
 
+export default App
+
+
+//
+//                      
 
 //<Layout>
 //    <Routes>
