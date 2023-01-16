@@ -1,4 +1,5 @@
-﻿import react, { useState,useEffect, useContext } from "react"
+﻿import react, { useState, useEffect, useContext } from "react"
+import {Link, useNavigate, useLocation } from "react-router-dom"
 import axios from 'axios'
 import { Formik } from 'formik'
 import * as Yup from 'yup';
@@ -8,6 +9,11 @@ import AuthContext from "../context/AuthProvider"
 const LoginForm = () => {
 
     const { auth, setAuth } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+    const location = useLocation(); 
+    //this is to receive the path where user is coming from before login
+    const from = location.state.from.pathname || "/"
 
     return (
         <Formik
@@ -48,6 +54,8 @@ const LoginForm = () => {
                             console.log(data.message)
                         }
                         console.log(data.data)
+                        setAuth(data.data)
+                        navigate(from, {replace: true})
                     })
                     .catch((error) => {
                         console.log(error.message);
