@@ -13,7 +13,6 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const location = useLocation(); 
     //this is to receive the path where user is coming from before login
-    const from = location.state.from.pathname || "/"
 
     return (
         <Formik
@@ -55,7 +54,7 @@ const LoginForm = () => {
                         }
                         console.log(data.data)
                         setAuth(data.data)
-                        navigate(from, {replace: true})
+                        navigate(location.state.from.pathname || "/", {replace: true})
                     })
                     .catch((error) => {
                         console.log(error.message);

@@ -178,6 +178,12 @@ namespace RECMS.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Link")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Link"));
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 

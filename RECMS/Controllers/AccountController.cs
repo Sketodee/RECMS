@@ -22,9 +22,9 @@ namespace RECMS.Controllers
         }
 
         [HttpPost("signup"), AllowAnonymous]
-        public async Task<ActionResult<ServiceResponse<User>>> Signup(User user)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> Signup(UserDto userDto)
         {
-            var response = await _accountService.Signup(user);
+            var response = await _accountService.Signup(userDto);
             return Ok(response);
         }
         

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RECMS.Models
+namespace RECMS.Dtos
 {
-    public class User
+    public class UserDto
     {
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]
@@ -17,7 +16,5 @@ namespace RECMS.Models
         public string ConfirmPassword { get; set; } = string.Empty;
         //public string FullName { get; set; } = string.Empty;
         public string AccountDetails { get; set; } = string.Empty;
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Link { get; set; }
     }
 }
