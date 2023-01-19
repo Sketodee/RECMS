@@ -1,10 +1,13 @@
-﻿import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect, useContext} from 'react'
 import Login from './Login';
-import axios from 'axios'
+import axios from 'axios';
+import AuthContext from "../context/AuthProvider"
+
 
 const Something = () => {
 
     const [items, setItems] = useState([]);
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         axios.get("Testing/gettest").then((response) => {
@@ -20,21 +23,18 @@ const Something = () => {
         //    })
     }, [])
 
-    console.log(items)
-    console.log("why")
 
     const Display = (item) => {
         return (
-            <p> {item.name} </p>
+            <p> {item.name},  </p>
             )
     }
 
     return (
         <div>
-            <p> something works here </p>
+            <p> something works here, {auth?.email} </p>
             <button className="btn btn-success"> i am me </button>
             {items.length > 0 ? items.map(item => <p key={ item.id}> {item.name}</p>) : <p> Loading ... </p>}
-            <Login />
         </div>
         
     );

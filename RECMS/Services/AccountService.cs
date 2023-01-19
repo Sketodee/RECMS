@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,33 +13,46 @@ namespace RECMS.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly DataContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public AccountService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, IConfiguration configuration)
+        public AccountService(
+            UserManager<AppUser> userManager,
+            DataContext context,
+            RoleManager<IdentityRole> roleManager, 
+            SignInManager<AppUser> signInManager,
+             IMapper mapper,
+            IConfiguration configuration)
         {
             _userManager = userManager;
+            _context = context;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _mapper = mapper;
             _configuration = configuration;
         }
 
 
-        public async Task<ServiceResponse<User>> Signup(User user)
+        public async Task<ServiceResponse<UserDto>> Signup(UserDto userDto)
         {
-            ServiceResponse<User> response = new();
+            ServiceResponse<UserDto> response = new();
             try
             {
-                AppUser appUser = new AppUser
-                {
-                    UserName = user.Email,
-                    Email = user.Email,
-                    //FullName = user.FullName,
-                    AccountDetails = user.AccountDetails,
-                };
+                var user = _mapper.Map<User>(userDto);
+                var appUser = _mapper.Map<AppUser>(user);
 
-                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+                //AppUser appUser = new AppUser
+                //{
+                //    UserName = user.Email,
+                //    Email = user.Email,
+                //    AccountDetails = user.AccountDetails,
+                //};
+
+                IdentityResult result = await _userManager.CreateAsync(appUser, userDto.Password);
+                await _userManager.UpdateAsync(appUser);
 
                 //check if user role already exists
                 if (!await _roleManager.RoleExistsAsync("User"))
@@ -61,7 +75,7 @@ namespace RECMS.Services
             }
             catch (Exception ex)
             {
-                response.Message = ex.Message;
+                response.Message = ex.InnerException.Message;
                 response.Success = false;
             }
 

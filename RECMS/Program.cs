@@ -1,5 +1,6 @@
 global using RECMS.Models;
 global using RECMS.Data;
+global using RECMS.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -38,6 +39,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 //registered services 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddHttpContextAccessor();
 

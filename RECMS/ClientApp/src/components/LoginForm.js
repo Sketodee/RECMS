@@ -1,27 +1,27 @@
 ﻿import react, { useState, useEffect, useContext } from "react"
+import {Link, useNavigate, useLocation } from "react-router-dom"
 import axios from 'axios'
 import { Formik } from 'formik'
 import * as Yup from 'yup';
+//import useAuth from '../hooks/useAuth'
 import AuthContext from "../context/AuthProvider"
 
-const SignupForm = () => {
+const LoginForm = () => {
 
-    const { setAuth } = useContext(AuthContext);
+    const { auth, setAuth } = useContext(AuthContext);
 
-    return(
+    const navigate = useNavigate();
+    const location = useLocation(); 
+    //this is to receive the path where user is coming from before login
 
+    return (
         <Formik
             initialValues={{
                 email: '',
-                accountDetails: '',
                 password: '',
-                confirmPassword: ''
             }}
 
             validationSchema={Yup.object({
-                accountDetails: Yup.string()
-                    .max(15, 'Must be 15 characters or less')
-                    .required('Required'),
                 email: Yup.string().email('Invalid email address').required('Required'),
                 password: Yup.string()
                     .required("Please enter your password")
@@ -30,9 +30,6 @@ const SignupForm = () => {
                     .matches(/[A-Z]+/, "Password must contain one uppercase character")
                     .matches(/[@$!%*#?&]+/, "Password must contain at least one special character(@$!%*#?&)")
                     .matches(/\d+/, "Password must contain at least one number"),
-                confirmPassword: Yup.string()
-                    .required("Please confirm your password")
-                    .oneOf([Yup.ref('password'), null], "Passwords don't match.")
             })}
 
             onSubmit={(values, { resetForm }) => {
@@ -43,7 +40,7 @@ const SignupForm = () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(values)
                 };
-                fetch('Account/signup', requestOptions)
+                fetch('Account/login', requestOptions)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(response.status);
@@ -52,10 +49,12 @@ const SignupForm = () => {
                         return response.json();
                     })
                     .then(data => {
-                        console.log(data)
                         if (!data.success) {
                             console.log(data.message)
                         }
+                        console.log(data.data)
+                        setAuth(data.data)
+                        navigate(location.state.from.pathname || "/", {replace: true})
                     })
                     .catch((error) => {
                         console.log(error.message);
@@ -70,36 +69,22 @@ const SignupForm = () => {
         >
 
             {formik => (
-                <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="email" className="mb-2, mt-3">Email Address {formik.touched.email && formik.errors.email ? <span className="text-danger fs-6">({formik.errors.email})</span> : null }  </label>
+                <form className = "mt-5" onSubmit={formik.handleSubmit}>
+                    <label htmlFor="email" className="mb-2, mt-3">Email Address {formik.touched.email && formik.errors.email ? <span className="text-danger fs-6">({formik.errors.email})</span> : null}  </label>
                     <input className="form-control"
                         id="email"
                         type="email"
                         {...formik.getFieldProps('email')}
                     />
 
-                    <label htmlFor="accountDetails" className="mt-3">Account details {formik.touched.accountDetails && formik.errors.accountDetails ? <span className="text-danger">({formik.errors.accountDetails})</span> : null } </label>
-                    <input className="form-control"
-                        id="accountDetails"
-                        type="text"
-                        {...formik.getFieldProps('accountDetails')}
-                    />
-
-                    <label htmlFor="password" className="mt-3"> Password {formik.touched.password && formik.errors.password ? <span className="text-danger">({formik.errors.password})</span> : null } </label>
+                    <label htmlFor="password" className="mt-3"> Password {formik.touched.password && formik.errors.password ? <span className="text-danger">({formik.errors.password})</span> : null} </label>
                     <input className="form-control"
                         id="password"
                         type="password"
                         {...formik.getFieldProps('password')}
                     />
 
-                    <label htmlFor="confirmPassword" className="mt-3"> Confirm Password {formik.touched.confirmPassword && formik.errors.confirmPassword ? <span className="text-danger">({formik.errors.confirmPassword})</span> : null }</label>
-                    <input className="form-control"
-                        id="confirmPassword"
-                        type="password"
-                        {...formik.getFieldProps('confirmPassword')}
-                    />
-
-                    <button className="btn btn-primary mt-3" type="submit">Submit</button>
+                    <button className="btn btn-success mt-3" type="submit">Login</button>
                 </form>
 
             )}
@@ -108,4 +93,4 @@ const SignupForm = () => {
     )
 }
 
-export default SignupForm
+export default LoginForm
