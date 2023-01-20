@@ -2,7 +2,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RECMS.Dtos;
 using RECMS.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -44,38 +46,46 @@ namespace RECMS.Services
                 var user = _mapper.Map<User>(userDto);
                 var appUser = _mapper.Map<AppUser>(user);
 
-                //AppUser appUser = new AppUser
-                //{
-                //    UserName = user.Email,
-                //    Email = user.Email,
-                //    AccountDetails = user.AccountDetails,
-                //};
-
-                IdentityResult result = await _userManager.CreateAsync(appUser, userDto.Password);
-                await _userManager.UpdateAsync(appUser);
-
-                //check if user role already exists
-                if (!await _roleManager.RoleExistsAsync("User"))
-                    await _roleManager.CreateAsync(new IdentityRole("User"));
-
-                if (await _roleManager.RoleExistsAsync("User"))
+                //find if referrer is in the system
+                var referrer = await _context.Users.Where(x => x.ReferralId == user.ReferralId).FirstOrDefaultAsync();
+                if (referrer != null)
                 {
-                    await _userManager.AddToRoleAsync(appUser, "User");
+                    IdentityResult result = await _userManager.CreateAsync(appUser, userDto.Password);
+
+                    if (result.Succeeded)
+                    {
+                        //check if user role already exists
+                        if (!await _roleManager.RoleExistsAsync("User"))
+                            await _roleManager.CreateAsync(new IdentityRole("User"));
+
+                        if (await _roleManager.RoleExistsAsync("User"))
+                        {
+                            await _userManager.AddToRoleAsync(appUser, "User");
+                        }
+                        response.Success = true;
+                        response.Message = "User created successfully";
+                    }
+                    else if (!result.Succeeded)
+                    {
+                        response.Message = "Can't create user " + result.Errors.FirstOrDefault()?.Description;
+                        response.Success = false;
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.Message = "Can't create user";
+                    }
                 }
-
-                if (!result.Succeeded)
+                else
                 {
-                    response.Message = "can't create user " + result.Errors.FirstOrDefault()?.Description;
                     response.Success = false;
-                    return response;
+                    response.Message = "Referrer does not exist";
                 }
-
-                response.Success = true;
-                response.Message = "user created successfully";
+              
             }
             catch (Exception ex)
             {
-                response.Message = ex.InnerException.Message;
+                response.Message = ex.Message;
                 response.Success = false;
             }
 
@@ -83,39 +93,43 @@ namespace RECMS.Services
         }
 
 
-        public async Task<ServiceResponse<User>> CreateAdmin(User user)
+        public async Task<ServiceResponse<UserDto>> CreateAdmin(UserDto userDto)
         {
-            ServiceResponse<User> response = new();
+            ServiceResponse<UserDto> response = new();
             try
             {
-                AppUser appUser = new AppUser
+                var user = _mapper.Map<User>(userDto);
+                var appUser = _mapper.Map<AppUser>(user);
+
+                IdentityResult result = await _userManager.CreateAsync(appUser, userDto.Password);
+
+                if(result.Succeeded)
                 {
-                    UserName = user.Email,
-                    Email = user.Email,
-                    //FullName = user.FullName,
-                    AccountDetails = user.AccountDetails,
-                };
+                    //check if user role already exists
+                    if (!await _roleManager.RoleExistsAsync("Admin"))
+                        await _roleManager.CreateAsync(new IdentityRole("Admin"));
 
-                IdentityResult result = await _userManager.CreateAsync(appUser, user.Password);
+                    if (await _roleManager.RoleExistsAsync("Admin"))
+                    {
+                        await _userManager.AddToRoleAsync(appUser, "Admin");
+                    }
 
-                //check if user role already exists
-                if (!await _roleManager.RoleExistsAsync("Admin"))
-                    await _roleManager.CreateAsync(new IdentityRole("Admin"));
-
-                if (await _roleManager.RoleExistsAsync("Admin"))
-                {
-                    await _userManager.AddToRoleAsync(appUser, "Admin");
+                    response.Success = true;
+                    response.Message = "admin created successfully";
                 }
-
-                if (!result.Succeeded)
+               else if (!result.Succeeded)
                 {
                     response.Message = "can't create admin " + result.Errors.FirstOrDefault()?.Description;
                     response.Success = false;
-                    return response;
                 }
 
-                response.Success = true;
-                response.Message = "admin created successfully";
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Can't create admin";
+                }
+
+               
             }
             catch (Exception ex)
             {

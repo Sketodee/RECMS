@@ -16,5 +16,9 @@ namespace RECMS.Dtos
         public string ConfirmPassword { get; set; } = string.Empty;
         //public string FullName { get; set; } = string.Empty;
         public string AccountDetails { get; set; } = string.Empty;
+        public string Surname { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public int ReferralId { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }
