@@ -41,6 +41,7 @@ builder.Services.AddSwaggerGen(options =>
 //registered services 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IClientService, ClientService>();    
 builder.Services.AddHttpContextAccessor();
 
 //for Entity Framework 

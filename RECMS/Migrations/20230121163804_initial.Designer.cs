@@ -12,7 +12,7 @@ using RECMS.Data;
 namespace RECMS.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230120193740_initial")]
+    [Migration("20230121163804_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -170,6 +170,14 @@ namespace RECMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -215,7 +223,7 @@ namespace RECMS.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ReferralId")
+                    b.Property<int>("ReferrerId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")

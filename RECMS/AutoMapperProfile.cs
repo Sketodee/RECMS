@@ -11,10 +11,10 @@ namespace RECMS
 
             CreateMap<User, AppUser>()
                 .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.Email)); 
-
             CreateMap<AppUser, User>();
 
-
+            CreateMap<Client, ClientDto>(); 
+            CreateMap<ClientDto, Client>();
         }
     }
 }

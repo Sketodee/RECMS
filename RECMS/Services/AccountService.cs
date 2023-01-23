@@ -47,7 +47,7 @@ namespace RECMS.Services
                 var appUser = _mapper.Map<AppUser>(user);
 
                 //find if referrer is in the system
-                var referrer = await _context.Users.Where(x => x.ReferralId == user.ReferralId).FirstOrDefaultAsync();
+                var referrer = await _context.Users.Where(x => x.ReferrerId == user.ReferrerId).FirstOrDefaultAsync();
                 if (referrer != null)
                 {
                     IdentityResult result = await _userManager.CreateAsync(appUser, userDto.Password);
