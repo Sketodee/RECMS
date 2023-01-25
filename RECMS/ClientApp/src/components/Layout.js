@@ -7,7 +7,6 @@ import MyNav from './MyNav'
 const Layout = () => {
     return (
         <>
-            <NavMenu />
             <Container>
                 <Outlet />
             </Container>
