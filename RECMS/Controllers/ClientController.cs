@@ -23,10 +23,11 @@ namespace RECMS.Controllers
             return Ok(response);
         }
 
-        [HttpGet, AllowAnonymous]
-        public IActionResult Get ()
+        [HttpGet("getregisteredclients")]
+        public async Task<ActionResult<ServiceResponse<List<ClientDto>>>> GetRegisteredClients()
         {
-            return Ok("hey");
+            var response = await _clientService.GetRegisteredClients();
+            return Ok(response);
         }
     }
 }

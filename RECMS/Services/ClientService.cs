@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace RECMS.Services
 {
@@ -17,6 +18,33 @@ namespace RECMS.Services
             _mapper = mapper;
             _context = context;
         }
+
+        public async Task<ServiceResponse<List<ClientDto>>> GetRegisteredClients()
+        {
+            ServiceResponse<List<ClientDto>> response = new(); 
+            try
+            {
+                var httpContext = _accessor.HttpContext;
+                var getUser = httpContext?.User.Identity?.Name;
+
+                var findUser = _userManager.FindByNameAsync(getUser);
+                var user = findUser.Result;
+
+                var clients = await _context.Clients.Where(x => x.UserId == user.Id).ToListAsync();
+
+                response.Data = clients.Select(x => _mapper.Map<ClientDto>(x)).ToList();
+                response.Message = "Client successfully fetched";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;  
+                response.Success = false;
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<ClientDto>> RegisterClient(ClientDto clientDto)
         {
             ServiceResponse<ClientDto> response = new(); 
