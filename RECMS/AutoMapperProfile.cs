@@ -15,6 +15,9 @@ namespace RECMS
 
             CreateMap<Client, ClientDto>(); 
             CreateMap<ClientDto, Client>();
+
+            CreateMap<Client, GetClientDto>();
+            CreateMap<GetClientDto, Client>();
         }
     }
 }

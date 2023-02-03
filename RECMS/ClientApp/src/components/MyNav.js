@@ -34,6 +34,7 @@ const MyNav = () => {
                                 <Nav className="justify-content-end flex-grow-1 pe-3">
                                     <Nav.Item> <Nav.Link eventKey="1" as={Link} to="/"> Home</Nav.Link> </Nav.Item>
                                     <Nav.Item> <Nav.Link eventKey="1" as={Link} to="/counter"> Counter </Nav.Link> </Nav.Item>
+                                    <Nav.Item> <Nav.Link eventKey="1" as={Link} to="/client"> Client </Nav.Link> </Nav.Item>
                                     {/*<Nav.Link as={Link} to="/"> Home</Nav.Link>*/}
                                     {/*<Nav.Link as={Link} to= "/counter"> Counter </Nav.Link>*/}
                                     <NavDropdown

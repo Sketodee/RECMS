@@ -10,6 +10,7 @@ import './custom.css';
 import { FetchData } from './components/FetchData';
 import Signup from './components/Signup';
 import Layout from './components/Layout';
+import Client from './components/Client'
 import RequireAuth from "./context/RequireAuth"
 
 const App = () => {
@@ -24,8 +25,10 @@ const App = () => {
                 <Route element={<RequireAuth />}> 
                     <Route path="/" element={<Home />} />
                     <Route path="/something" element={<Something />} />
-    //              <Route path="/fetch-data" element={<FetchData />} />
-    //              <Route path="/counter" element={<Counter />} />
+                    <Route path="/fetch-data" element={<FetchData />} />
+                    <Route path="/counter" element={<Counter />} />
+                    <Route path="/client" element={<Client />} />
+                    
                 </Route>
             </Route>
         </Routes>

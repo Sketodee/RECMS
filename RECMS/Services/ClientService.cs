@@ -19,9 +19,9 @@ namespace RECMS.Services
             _context = context;
         }
 
-        public async Task<ServiceResponse<List<ClientDto>>> GetRegisteredClients()
+        public async Task<ServiceResponse<List<GetClientDto>>> GetRegisteredClients()
         {
-            ServiceResponse<List<ClientDto>> response = new(); 
+            ServiceResponse<List<GetClientDto>> response = new(); 
             try
             {
                 var httpContext = _accessor.HttpContext;
@@ -32,7 +32,7 @@ namespace RECMS.Services
 
                 var clients = await _context.Clients.Where(x => x.UserId == user.Id).ToListAsync();
 
-                response.Data = clients.Select(x => _mapper.Map<ClientDto>(x)).ToList();
+                response.Data = clients.Select(x => _mapper.Map<GetClientDto>(x)).ToList();
                 response.Message = "Client successfully fetched";
                 response.Success = true;
             }

@@ -24,7 +24,7 @@ namespace RECMS.Controllers
         }
 
         [HttpGet("getregisteredclients")]
-        public async Task<ActionResult<ServiceResponse<List<ClientDto>>>> GetRegisteredClients()
+        public async Task<ActionResult<ServiceResponse<List<GetClientDto>>>> GetRegisteredClients()
         {
             var response = await _clientService.GetRegisteredClients();
             return Ok(response);
