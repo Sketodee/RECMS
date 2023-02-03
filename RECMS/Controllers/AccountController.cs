@@ -30,18 +30,18 @@ namespace RECMS.Controllers
         
         
         [HttpPost("createadmin"), AllowAnonymous]
-        public async Task<ActionResult<ServiceResponse<User>>> CreateAdmin(User user)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> CreateAdmin(UserDto userDto)
         {
-            var response = await _accountService.CreateAdmin(user);
+            var response = await _accountService.CreateAdmin(userDto);
             return Ok(response);
         }
 
-        [HttpGet("testendpoint"), Authorize(Roles = "Admin")]
-        public IActionResult Get()
-        {
-            var value = HttpContext.Response.StatusCode;
-            return Ok(value);
-        }
+        //[HttpGet("testendpoint"), Authorize(Roles = "Admin")]
+        //public IActionResult Get()
+        //{
+        //    var value = HttpContext.Response.StatusCode;
+        //    return Ok(value);
+        //}
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<LoginCred>>> Login(LoginUser login)

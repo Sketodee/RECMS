@@ -3,7 +3,7 @@
     public interface  IAccountService
     {
         Task<ServiceResponse<UserDto>> Signup (UserDto userDto);
-        Task<ServiceResponse<User>> CreateAdmin (User user);
+        Task<ServiceResponse<UserDto>> CreateAdmin (UserDto userDto);
         Task<ServiceResponse<LoginCred>> Login(LoginUser login);
     }
 }

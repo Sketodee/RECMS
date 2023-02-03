@@ -1,12 +1,14 @@
-﻿import react from 'react'
+﻿import react, { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 
 const Dashboard = () => {
 
-    const {auth } = useAuth()
-
+    const { auth } = useAuth()
+    
     return (
-        <h1> Welcome {auth.email } </h1>   
+        <>
+            <p> {auth.email} </p>
+        </>
      )
 }
 
