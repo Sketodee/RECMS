@@ -10,7 +10,7 @@ import './custom.css';
 import { FetchData } from './components/FetchData';
 import Signup from './components/Signup';
 import Layout from './components/Layout';
-import Client from './components/Client'
+import Client from './pages/Client'
 import RequireAuth from "./context/RequireAuth"
 
 const App = () => {
