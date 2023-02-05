@@ -34,7 +34,7 @@ const ClientList = () => {
                 </tr>
             </thead>
             <tbody>
-                {items.map((item, index) =>
+                {items.length> 0 ? items.map((item, index) =>
                     <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td>{item.clientId}</td>
@@ -42,7 +42,7 @@ const ClientList = () => {
                         <td>{item.phoneNumber}</td>
                         <td>{item.address}</td>
                     </tr>
-                )}
+                ) : <p className = "py-3"> No Registered Clients </p>}
             </tbody>
         </table>
      )

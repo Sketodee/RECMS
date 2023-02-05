@@ -13,17 +13,18 @@ const AddClient = () => {
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-    const notify = () => toast("Wow so easy!", {
+    const notify = (toastType, message) => toastType(message, {
         position: "top-center",
+        theme: "colored",
+        autoClose: 2000,
     });
 
     return (
         <div>
+            <ToastContainer />
             <div className="d-flex justify-content-between py-3">
                 <h2> Registered Clients </h2>
                 <button type="button" className="btn btn-success" onClick={handleShow}> Register Client </button>
-                <button onClick={notify}> test toast </button>
-                <ToastContainer />
             </div>
 
             <Modal show={show} onHide={handleClose}>
@@ -31,7 +32,7 @@ const AddClient = () => {
                     <Modal.Title>Add New Client</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AddClientForm handleClose={handleClose} />
+                    <AddClientForm handleClose={handleClose} notify={notify } />
                 </Modal.Body>
                 {/*<Modal.Footer>*/}
                 {/*    <button className="btn btn-secondary" onClick={handleClose}>Close</button>*/}

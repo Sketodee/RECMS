@@ -2,8 +2,14 @@
 import * as Yup from 'yup';
 import useAuth from '../hooks/useAuth'
 
-const AddClientForm = ({ handleClose }) => {
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+const AddClientForm = ({ handleClose, notify }) => {
     const { auth } = useAuth()
+
+
     return (
         <Formik
             initialValues={{
@@ -43,13 +49,15 @@ const AddClientForm = ({ handleClose }) => {
                         return response.json();
                     })
                     .then(data => {
-                        console.log(data)
                         if (!data.success) {
                             console.log(data.message)
                         }
+                        notify(toast.success, "Client Created Successfully")
+                        console.log(data) 
                     })
                     .catch((error) => {
                         console.log(error.message);
+                        notify(toast.error, "Error Creating Client")
                         //if (error.message === 401) {
                         //    console.log("Not Authorized")
                         //} else if (error.message == 404) {
